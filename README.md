@@ -68,7 +68,7 @@ java -jar /path/to/Log4jDetector.jar
 
 1. Set environment variable `LOG4J_DETECTOR_JVM_TARGET_PATTERN` equal to target pattern
 ```sh
-export LOG4J_DETECTOR_JVM_TARGET_PATTERN="MyApp.jar"
+export LOG4J_DETECTOR_JVM_TARGET_PATTERN=".*MyApp.jar.*"
 ```
 2. Run the detector
 ```sh
