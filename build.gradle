@@ -1,0 +1,117 @@
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/'}
+        maven { url 'http://dl.bintray.com/content/aalmiray/kordamp'; allowInsecureProtocol = true }
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4',
+        		  'gradle.plugin.com.github.jk1:gradle-license-report:1.3',
+                  'org.kordamp:markdown-gradle-plugin:1.1.0'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'com.github.jk1.dependency-license-report'
+apply plugin: 'org.kordamp.markdown.convert'
+
+project.version            = version
+ext.manifestVersion        = '1.0'
+ext.mainClass              = 'com.github.theque5t.Log4jDetector.Loader'
+ext.premainClass           = 'com.github.theque5t.Log4jDetector.Agent'
+ext.agentClass             = 'com.github.theque5t.Log4jDetector.Agent'
+ext.specificationName      = 'com/github/theque5t/Log4jDetector/'
+ext.specificationTitle     = 'Log4j Detector'
+ext.specificationVendor    = 'theque5t'
+ext.specificationVersion   = '1.0.0'
+ext.implementationVendor   = 'theque5t'
+ext.implementationVendorId = 'com.github.theque5t.Log4jDetector'
+ext.implementationURL      = 'https://github.com/theque5t/Log4jDetector'
+ext.licenseTitle           = 'MIT License'
+ext.dependencyIndex        = 'index.md'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.16.0'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.16.0'
+}
+
+task addHtmlToConversionWorkspace(type: Copy){
+    into "$buildDir/output/META-INF"
+    from "$buildDir/reports/dependency-license/index.html"
+}
+
+htmlToMarkdown {
+    sourceDir = file("$buildDir/output/META-INF")
+    outputDir = file("$buildDir/output/META-INF")
+}
+
+task addDependencyLicenseToOutput(type: Copy) {
+    into "$buildDir/output/META-INF"
+    from "$buildDir/reports/dependency-license"
+}
+
+task addLicenseToOutput(type: Copy) {
+    into "$buildDir/output/META-INF"
+    from "LICENSE"
+    rename { String fileName ->
+    fileName.replace("LICENSE", "${project.name}_LICENSE")
+  }
+}
+
+task createReports(type: Copy) {
+    into "$buildDir/reports/"
+    from "$buildDir/output/META-INF"
+}
+
+task cleanUpOutput(type: Delete){
+    delete "$buildDir/output/META-INF/index.html"
+}
+
+task cleanUpReports(type: Delete){
+    delete "$buildDir/reports/index.html"
+    delete "$buildDir/reports/dependency-license"
+    delete "$buildDir/reports/${project.name}_LICENSE"
+}
+
+shadowJar {
+    from "$buildDir/output"
+    classifier = null
+    manifest {
+    	attributes 'Manifest-Version': manifestVersion
+        attributes 'Main-Class': mainClass
+        attributes 'Premain-Class': premainClass
+        attributes 'Agent-Class': agentClass
+        attributes 'Can-Redefine-Classes': false
+        attributes 'Can-Retransform-Classes': false
+        attributes 'Can-Set-Native-Method-Prefix': false
+	    attributes 'Name': specificationName
+		attributes 'Specification-Title': specificationTitle
+		attributes 'Specification-Vendor': specificationVendor
+		attributes 'Specification-Version': specificationVersion
+		attributes 'Implementation-Title': project.name
+		attributes 'Implementation-Version': project.version
+		attributes 'Implementation-Vendor': implementationVendor
+		attributes 'Implementation-Vendor-Id': implementationVendorId
+		attributes 'Implementation-URL': implementationURL
+		attributes 'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date())
+        attributes 'Build-Jdk': "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})"
+        attributes 'Created-By': "Gradle ${gradle.gradleVersion}"
+        attributes 'License-Title': licenseTitle
+        attributes 'License-File': "${project.name}_LICENSE"
+        attributes 'Dependency-Index': dependencyIndex
+    }
+}
+
+addHtmlToConversionWorkspace.dependsOn(generateLicenseReport)
+htmlToMarkdown.dependsOn(addHtmlToConversionWorkspace)
+addDependencyLicenseToOutput.dependsOn(htmlToMarkdown)
+addLicenseToOutput.dependsOn(addDependencyLicenseToOutput)
+createReports.dependsOn(addLicenseToOutput)
+cleanUpOutput.dependsOn(createReports)
+cleanUpReports.dependsOn(cleanUpOutput)
+shadowJar.dependsOn(cleanUpReports)

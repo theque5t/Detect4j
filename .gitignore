@@ -1,0 +1,9 @@
+.gradle
+.vscode
+bin
+build/classes
+build/generated
+build/output
+build/resources
+build/tmp
+build/libs
