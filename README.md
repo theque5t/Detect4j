@@ -36,7 +36,16 @@ SOFTWARE.
 gradle clean ShadowJar
 ```
 
+## Requirements
+
+Log4jDetector requires the following to run:
+
+-  JDK 11+
+
+> **_NOTE:_**  Currently working on lowering the requirement to JDK 8+
+
 ## Installation
+
 1. Download the runnable [jar](https://github.com/theque5t/Log4jDetector/releases) to system that needs to be scanned.
 ```sh
 wget "https://github.com/theque5t/Log4jDetector/releases/download/v1.0.0/Log4jDetector-v1.0.0.jar"
