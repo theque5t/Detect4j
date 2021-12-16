@@ -1,6 +1,6 @@
 # Log4jDetector
 
-[![Build Status](https://travis-ci.com/theque5t/Log4jDetector.svg?branch=master)](https://travis-ci.com/theque5t/Log4jDetector)
+[![Build Status](https://app.travis-ci.com/theque5t/Log4jDetector.svg?branch=main)](https://app.travis-ci.com/github/theque5t/Log4jDetector)
 
 Runnable jar that that detects if [Log4j](https://www.google.com/search?q=log4j) is in use within existing JVMs
 
@@ -37,7 +37,7 @@ gradle clean ShadowJar
 ```
 
 ## Installation
-1. Download runnable [jar]() to system that needs to be scanned.
+1. Download the runnable [jar](https://github.com/theque5t/Log4jDetector/releases) to system that needs to be scanned.
 ```sh
 wget "https://github.com/theque5t/Log4jDetector/releases/download/v1.0.0/Log4jDetector-1.0.0.jar"
 ```
@@ -155,7 +155,7 @@ Log4jDetector makes use of the open source projects listed on the [index.md](bui
 
 ## Donations
 
-If you'd like to support the development of future projects, or say thanks for this one, you can donate ADA at the following address: addr1q9xy47gj8nel06azt5mrlr2zwcut9d2m49xp8wmkmuwuml8y0xfqqy3cz50ly3xjc6z7g7cnhta4z9yansz6qzeq7kxstav289
+If you'd like to support the development of future projects, or say thanks for this one, you can donate ADA at the following address: `addr1q9xy47gj8nel06azt5mrlr2zwcut9d2m49xp8wmkmuwuml8y0xfqqy3cz50ly3xjc6z7g7cnhta4z9yansz6qzeq7kxstav289`
 
 ---
 
