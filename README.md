@@ -6,8 +6,6 @@ Runnable jar that that detects if [Log4j](https://www.google.com/search?q=log4j)
 
 ![Demo](./docs/assets/demo.gif)
 
-[TOC]
-
 ## Disclaimer
 
 Please read the [license](./LICENSE). This is a work in progress. Best effort was made to test the software, but it is not gauranteed to work perfectly in all contexts. 
