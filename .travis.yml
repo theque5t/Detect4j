@@ -2,9 +2,9 @@
 language: java
 install: true
 jdk:
-  - openjdk8
-  - openjdk9
-  - openjdk10
+  # - openjdk8
+  # - openjdk9
+  # - openjdk10
   - openjdk11
 env:
   global:
@@ -15,7 +15,7 @@ jobs:
   include:
     - stage: deploy
       install: true
-      jdk: openjdk8
+      jdk: openjdk11
       script:
         - gradle -P version="${TRAVIS_TAG}" clean ShadowJar 
       deploy:
