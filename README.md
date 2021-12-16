@@ -8,7 +8,7 @@ Runnable jar that that detects if [Log4j](https://www.google.com/search?q=log4j)
 
 ## Disclaimer
 
-Please read the [license](./LICENSE). This is a work in progress. Best effort was made to test the software, but it is not gauranteed to work perfectly in all contexts. 
+Please read the [license](./LICENSE). This is a work in progress. Best effort was made to test the software, but it is not guaranteed to work perfectly in all contexts. 
 
 ```
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -39,7 +39,7 @@ gradle clean ShadowJar
 ## Installation
 1. Download the runnable [jar](https://github.com/theque5t/Log4jDetector/releases) to system that needs to be scanned.
 ```sh
-wget "https://github.com/theque5t/Log4jDetector/releases/download/v1.0.0/Log4jDetector-1.0.0.jar"
+wget "https://github.com/theque5t/Log4jDetector/releases/download/v1.0.0/Log4jDetector-v1.0.0.jar"
 ```
 
 ## Usage
@@ -68,7 +68,7 @@ java -jar /path/to/Log4jDetector.jar
 
 1. Set environment variable `LOG4J_DETECTOR_JVM_TARGET_PATTERN` equal to target pattern
 ```sh
-export LOG4J_DETECTOR_JVM_TARGET_PATTERN="MyApp.jar"
+export LOG4J_DETECTOR_JVM_TARGET_PATTERN=".*MyApp.jar.*"
 ```
 2. Run the detector
 ```sh
