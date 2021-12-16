@@ -2,21 +2,28 @@
 language: java
 install: true
 jdk:
+  - openjdk8
   - openjdk11
 env:
   global:
     - NAME=Log4jDetector
-    
 script:
   - gradle -P version="${TRAVIS_TAG}" clean ShadowJar 
-deploy:
-  provider: releases
-  api_key:
-    secure: "RQEHknyv7rEdrjbxmnXK6bq23ge1M1uVhweSErYYJVuHLEJeVDGk/mRYLu2/U8tPjERWxCD9ctqd2Adl3gj64AvYrnoos32JbQdjyeyRa4TO+VXo2YtUJN3Sbf68vSJzK4sqtOyNqj32KlUwQtjJsFMyiXkjUOriDkB9HnGwTquTEwYeve/GSQnx3K9pgmDpX00yMooDGcYDHk3hpp2n8WBqxdBbQTYkbdLExntw4i6l/g8BZjC66NUqtvnZrfP0Mrq7uyc8I3O2gKaDS5j4ZUkhrcdK4iTD4l0ISuG2vpswm0XT2p/ecgpsPuAe4knHf8xPwfja5a0LUJDk3JptmUYP981YCH3yvSH8kDeP0fPATOFmFrxDUQz9N2NMoJwnr/2nCtgr9YR12xNon/lwnlVS4fRVKkkJ68YNIhbkr99L/s+A3RZd7me8sKCZLcQ7sDkGXt2i5Mb193INoBVV2u+HmnEiQFL9Mszgb67QCcDBmut6WuftahLjMvpqHZ8OsqgoWg2Sh8r5Nh8mwjB1WgCGwwzIM4uDTfNMNRjBwX8MUf1zvXgWturU1o9tLoW1NKbPd/aNwzY6R9WbMe8sbpTjb2DWxcLRFAmU5ZN3NvqddYvJ5x0eYsC5OqYX17usDuLUvmsdBb6cEI5zJh2mO/DxPvev8OshsINTUVVbA5c="
-  file_glob: true
-  file: 
-    - build/libs/*
-  skip_cleanup: true
-  on:
-    repo: theque5t/Log4jDetector
-    tags: true
+jobs:
+  include:
+    - stage: deploy
+      install: true
+      jdk: openjdk8
+      script:
+        - gradle -P version="${TRAVIS_TAG}" clean ShadowJar 
+      deploy:
+        provider: releases
+        api_key:
+          secure: "RQEHknyv7rEdrjbxmnXK6bq23ge1M1uVhweSErYYJVuHLEJeVDGk/mRYLu2/U8tPjERWxCD9ctqd2Adl3gj64AvYrnoos32JbQdjyeyRa4TO+VXo2YtUJN3Sbf68vSJzK4sqtOyNqj32KlUwQtjJsFMyiXkjUOriDkB9HnGwTquTEwYeve/GSQnx3K9pgmDpX00yMooDGcYDHk3hpp2n8WBqxdBbQTYkbdLExntw4i6l/g8BZjC66NUqtvnZrfP0Mrq7uyc8I3O2gKaDS5j4ZUkhrcdK4iTD4l0ISuG2vpswm0XT2p/ecgpsPuAe4knHf8xPwfja5a0LUJDk3JptmUYP981YCH3yvSH8kDeP0fPATOFmFrxDUQz9N2NMoJwnr/2nCtgr9YR12xNon/lwnlVS4fRVKkkJ68YNIhbkr99L/s+A3RZd7me8sKCZLcQ7sDkGXt2i5Mb193INoBVV2u+HmnEiQFL9Mszgb67QCcDBmut6WuftahLjMvpqHZ8OsqgoWg2Sh8r5Nh8mwjB1WgCGwwzIM4uDTfNMNRjBwX8MUf1zvXgWturU1o9tLoW1NKbPd/aNwzY6R9WbMe8sbpTjb2DWxcLRFAmU5ZN3NvqddYvJ5x0eYsC5OqYX17usDuLUvmsdBb6cEI5zJh2mO/DxPvev8OshsINTUVVbA5c="
+        file_glob: true
+        file: 
+          - build/libs/*
+        skip_cleanup: true
+        on:
+          repo: theque5t/Log4jDetector
+          tags: true
