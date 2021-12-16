@@ -155,7 +155,7 @@ Log4jDetector makes use of the open source projects listed on the [index.md](bui
 
 ## Donations
 
-If you'd like to support the development of future projects, or say thanks for this one, you can donate ADA at `<address>`.
+If you'd like to support the development of future projects, or say thanks for this one, you can donate ADA at the following address: addr1q9xy47gj8nel06azt5mrlr2zwcut9d2m49xp8wmkmuwuml8y0xfqqy3cz50ly3xjc6z7g7cnhta4z9yansz6qzeq7kxstav289
 
 ---
 
