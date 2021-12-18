@@ -8,16 +8,17 @@ jdk:
   # - openjdk11
 env:
   global:
+    - VERSION="${TRAVIS_TAG}"
     - NAME=Log4jDetector
-script:
-  - gradle -P version="${TRAVIS_TAG}" clean ShadowJar 
+before_script: build.sh
+script: test.sh
 jobs:
   include:
     - stage: deploy
       install: true
       jdk: openjdk8
-      script:
-        - gradle -P version="${TRAVIS_TAG}" clean ShadowJar 
+      before_script: build.sh
+      script: test.sh
       deploy:
         provider: releases
         api_key:
