@@ -1,5 +1,5 @@
 #!/bin/bash
-java -jar executable.jar &                       # Start it in the background
+java -jar build/libs/Log4jDetector.jar &         # Start it in the background
 DetectorPID=$!                                   # Record PID
 echo $DetectorPID                                # Output PID
 sleep 5                                          # Let run for 5 seconds
