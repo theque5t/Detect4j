@@ -28,7 +28,7 @@ Dependency License Report for Log4jDetector
 
 --------------------
 
-This report was generated at  *Thu Dec 16 07:07:25 CST 2021* .
+This report was generated at  *Fri Dec 17 23:57:42 CST 2021* .
 
 
 [https_www.apache.org_licenses_LICENSE-2.0.txt]: https://www.apache.org/licenses/LICENSE-2.0.txt

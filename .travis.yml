@@ -2,10 +2,10 @@
 language: java
 install: true
 jdk:
-  # - openjdk8
+  - openjdk8
   # - openjdk9
   # - openjdk10
-  - openjdk11
+  # - openjdk11
 env:
   global:
     - NAME=Log4jDetector
@@ -15,7 +15,7 @@ jobs:
   include:
     - stage: deploy
       install: true
-      jdk: openjdk11
+      jdk: openjdk8
       script:
         - gradle -P version="${TRAVIS_TAG}" clean ShadowJar 
       deploy:
