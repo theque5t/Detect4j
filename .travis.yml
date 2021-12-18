@@ -10,6 +10,9 @@ env:
   global:
     - VERSION="${TRAVIS_TAG}"
     - NAME=Log4jDetector
+before_install:
+  - chmod +x scripts/build.sh
+  - chmod +x scripts/test.sh
 before_script: scripts/build.sh
 script: scripts/test.sh
 jobs:
@@ -17,6 +20,9 @@ jobs:
     - stage: deploy
       install: true
       jdk: openjdk8
+      before_install:
+        - chmod +x scripts/build.sh
+        - chmod +x scripts/test.sh
       before_script: scripts/build.sh
       script: scripts/test.sh
       deploy:
