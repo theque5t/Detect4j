@@ -3,8 +3,8 @@ echo "Started jar..."
 nohup bash -c 'echo "5" | java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar"'
 DetectorPID=$!                                                                # Record PID
 sleep 15                                                                      # Let run for 15 seconds
-echo $DetectorPID                                                           # Output PID
-kill $DetectorPID || exit 1                                                   # Stop or fail process does not exist
+echo $DetectorPID                                                             # Output PID
+# kill $DetectorPID || exit 1                                                   # Stop or fail process does not exist
 echo "Stopped jar..."
 echo "Outputting log..."
 echo "<start>"
