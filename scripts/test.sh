@@ -1,10 +1,11 @@
 #!/bin/bash
 echo "Started jar..."
-{ echo "5" | java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar" } &     # Start in the background with 5 second interval
-DetectorPID=$!                                                                # Record PID
-sleep 15                                                                      # Let run for 5 seconds
+( cmdpid=$BASHPID; (sleep 15; kill $cmdpid || exit 1 ) & echo "5" | exec java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar" )
+# echo "5" | java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar" &     # Start in the background with 5 second interval
+# DetectorPID=$!                                                                # Record PID
+# sleep 15                                                                      # Let run for 5 seconds
 # echo $DetectorPID                                                           # Output PID
-kill $DetectorPID || exit 1                                                   # Stop or fail process does not exist
+# kill $DetectorPID || exit 1                                                   # Stop or fail process does not exist
 echo "Stopped jar..."
 echo "Outputting log..."
 echo "<start>"
