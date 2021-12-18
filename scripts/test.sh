@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Started jar..."
-echo "5" | java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar" &     # Start in the background with 5 second interval
+{ echo "5" | java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar" } &     # Start in the background with 5 second interval
 DetectorPID=$!                                                                # Record PID
 sleep 15                                                                      # Let run for 5 seconds
 # echo $DetectorPID                                                           # Output PID
