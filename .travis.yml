@@ -1,5 +1,7 @@
 ---
 language: java
+before_install:
+  - chmod +x scripts/build.sh scripts/test.sh
 install: true
 jdk:
   - openjdk8
@@ -10,19 +12,16 @@ env:
   global:
     - VERSION="${TRAVIS_TAG}"
     - NAME=Log4jDetector
-before_install:
-  - chmod +x scripts/build.sh
-  - chmod +x scripts/test.sh
+
 before_script: scripts/build.sh
 script: scripts/test.sh
 jobs:
   include:
     - stage: deploy
+      before_install:
+        - chmod +x scripts/build.sh scripts/test.sh
       install: true
       jdk: openjdk8
-      before_install:
-        - chmod +x scripts/build.sh
-        - chmod +x scripts/test.sh
       before_script: scripts/build.sh
       script: scripts/test.sh
       deploy:
