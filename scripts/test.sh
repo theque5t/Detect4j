@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Started jar..."
-echo "5" | java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar" &     # Start in the background with 5 second interval
+nohup bash -c 'echo "5" | java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar"' &     # Start in the background with 5 second interval
 DetectorPID=$!                                                                # Record PID
 (sleep 15 && kill $DetectorPID) || echo "exit 1"                              # Let run for 15 seconds and stop, or fail if process does not exist
 echo "Stopped jar..."
