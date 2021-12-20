@@ -17,7 +17,7 @@ DetectorLog="Log4jDetector/log/app.log"
 for pattern in "${logPatterns[@]}"
 do
     echo "Testing for pattern: $pattern"
-    if grep -q "$pattern testing" "$DetectorLog"; then
+    if grep -q "$pattern" "$DetectorLog"; then
         echo "Passed for pattern: $pattern"
     else
         echo "Failed for pattern: $pattern"
