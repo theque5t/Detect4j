@@ -18,10 +18,14 @@ do
         echo "Passed: $pattern found"
     else
         echo "Failed: $pattern found"
-        exit 1
+        failed=true
     fi
 done
 echo "Outputting log..."
 echo "<start>"
 cat $DetectorLog
 echo "<end>"
+if $failed; then
+    echo "Failed"
+    exit 1
+fi
