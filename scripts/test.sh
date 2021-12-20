@@ -1,18 +1,27 @@
 #!/bin/bash
-echo "Started jar..."
-nohup bash -c 'echo "5" | java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar"' &     # Start in the background with 5 second interval
-DetectorPID=$!                                                                # Record PID
-(sleep 15 && kill $DetectorPID) || echo "exit 1"                              # Let run for 15 seconds and stop, or fail if process does not exist
-echo "Stopped jar..."
+echo "Starting jar..."
+java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar" &
+DetectorPID=$!
+echo "Stopping jar..."
+(sleep 15 && kill $DetectorPID) || exit 1
+echo "Testing..."
+declare -a logPatterns=(
+    "Searching for JVMs" 
+    "Found JVM"
+    "does not match target pattern"
+)
+DetectorLog="Log4jDetector/log/app.log"
+for pattern in "${logPatterns[@]}"
+do
+    echo "Testing for pattern: $pattern"
+    if grep -q "$pattern" "$DetectorLog"; then
+        echo "Passed: $pattern found"
+    else
+        echo "Failed: $pattern found"
+        exit 1
+    fi
+done
 echo "Outputting log..."
 echo "<start>"
-cat Log4jDetector/log/app.log                                                 # Output log
+cat $DetectorLog
 echo "<end>"
-line1="$(head -n 1 Log4jDetector/log/app.log)"                                # Get line 1 from log
-if [[ "${line1: -5:5}" == "Start" ]]; then                                    # Test if started successfully
-    echo "Pass"
-    exit 0
-else
-    echo "Fail"
-    exit 1
-fi
