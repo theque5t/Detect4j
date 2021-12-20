@@ -40,9 +40,12 @@ gradle clean ShadowJar
 
 Log4jDetector requires the following to run:
 
--  JDK 11+
+- JDK 8+
 
-> **_NOTE:_**  Currently working on lowering the requirement to JDK 8+
+### Operating System
+
+- Linux: All releases are currently for use on Linux.
+- Windows: Work In Progress. Currently not for use on Windows.
 
 ## Installation
 
