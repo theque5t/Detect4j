@@ -59,7 +59,6 @@ public class Loader {
         public void run() {
             while (!Thread.interrupted()) {
                 Boolean shouldInterrupt = false;
-                VirtualMachine jvm = null;
                 String prefix = null;
                 try {
                     String scanId = UUID.randomUUID().toString().replace("-", "");
@@ -76,12 +75,14 @@ public class Loader {
                         logger.info(prefix + "Found JVM: Id: " + jvmDescriptor.id() + ", Name: " + jvmDescriptor.displayName());
                     }
                     for (VirtualMachineDescriptor jvmDescriptor : jvms) {
+                        VirtualMachine jvm = null;
                         try{
                             String jvmDisplayName = jvmDescriptor.displayName();
                             if (jvmDisplayName.matches(jvmTargetPattern) && !jvmDisplayName.contains(thisJar.getName())) {
                                 logger.info(prefix + "Found JVM matches target pattern. Scanning: Id: " + jvmDescriptor.id() + ", Name: " + jvmDescriptor.displayName());
                                 
                                 logger.info(prefix + "Attaching to the JVM...");
+                                
                                 jvm = VirtualMachine.attach(jvmDescriptor.id());
                                 
                                 logger.info(prefix + "Loading agent into JVM...");
@@ -137,6 +138,7 @@ public class Loader {
                             }
                         }
                     }
+                    logger.info("Waiting for next scan... If not interrupted next scan starts in " + scanInterval + " seconds");
                     Thread.sleep(scanInterval * 1000);
                 }
                 catch (InterruptedException e) {
@@ -144,12 +146,12 @@ public class Loader {
                 }
                 catch (Exception e) {
                     shouldInterrupt = true;
-                    logger.info(prefix + "Caught Exception");
-                    logError(prefix, e);
+                    logger.info("Caught Exception");
+                    logError("", e);
                 }
                 finally{
                     if(shouldInterrupt){
-                        logger.info(prefix + "Interrupting thread...");
+                        logger.info("Interrupting thread...");
                         Thread.currentThread().interrupt();
                     }
                 }
