@@ -7,3 +7,4 @@ build/output
 build/resources
 build/tmp
 build/libs
+Log4jDetector
