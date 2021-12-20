@@ -28,16 +28,6 @@ public class Loader {
         }
     }
 
-    static void logScanInfo(String scanId, String message){
-        String prefix = "["+ scanId +"] ";
-        logger.info(prefix + message);
-    }
-
-    static void logScanError(String scanId, Exception exception){
-        String prefix = "["+ scanId +"] ";
-        logError(prefix, exception);
-    }
-
     static class TimeOutTask extends TimerTask {
         private Thread thread;
         private Timer timer;
@@ -70,94 +60,97 @@ public class Loader {
             while (!Thread.interrupted()) {
                 Boolean shouldInterrupt = false;
                 VirtualMachine jvm = null;
-                String scanId = null;
+                String prefix = null;
                 try {
-                    scanId = UUID.randomUUID().toString().replace("-", "");
-                    logScanInfo(scanId, "Scan start");
+                    String scanId = UUID.randomUUID().toString().replace("-", "");
+                    prefix = "["+ scanId +"] ";
                     File thisJar = new File(Loader.class
                         .getProtectionDomain()
                         .getCodeSource()
                         .getLocation()
                         .getPath()
                     );
-                    logScanInfo(scanId, "Searching for JVMs...");
+                    logger.info(prefix + "Searching for JVMs...");
                     List<VirtualMachineDescriptor> jvms = VirtualMachine.list();
                     for (VirtualMachineDescriptor jvmDescriptor : jvms) {
-                        logScanInfo(scanId, "Found JVM: " + jvmDescriptor.displayName());
+                        logger.info(prefix + "Found JVM: Id: " + jvmDescriptor.id() + ", Name: " + jvmDescriptor.displayName());
                     }
                     for (VirtualMachineDescriptor jvmDescriptor : jvms) {
-                        String jvmDisplayName = jvmDescriptor.displayName();
-                        if (jvmDisplayName.matches(jvmTargetPattern) && !jvmDisplayName.contains(thisJar.getName())) {
-                            logScanInfo(scanId, "Found JVM matches target pattern:");
-                            logScanInfo(scanId, "JVM Id: " + jvmDescriptor.id());
-                            logScanInfo(scanId, "JVM Display Name: " + jvmDescriptor.displayName());
-                            
-                            logScanInfo(scanId, "Attaching to the JVM...");
-                            jvm = VirtualMachine.attach(jvmDescriptor.id());
-                            
-                            logScanInfo(scanId, "Loading agent into JVM...");
-                            jvm.loadAgent(thisJar.getAbsolutePath(), scanHome);
-
-                            logScanInfo(scanId, "Returning agent results:");
-                            String results = Files.lines(Paths.get(scanHome + "\\results.txt"), StandardCharsets.US_ASCII)
-                                                .collect(Collectors.joining(System.lineSeparator()));
-                            logScanInfo(scanId, "\n" + results);
-
-                            logScanInfo(scanId, "Returning agent errors:");
-                            String errors = Files.lines(Paths.get(scanHome + "\\errors.txt"), StandardCharsets.US_ASCII)
-                                                .collect(Collectors.joining(System.lineSeparator()));
-                            logScanInfo(scanId, "\n" + errors);
+                        try{
+                            String jvmDisplayName = jvmDescriptor.displayName();
+                            if (jvmDisplayName.matches(jvmTargetPattern) && !jvmDisplayName.contains(thisJar.getName())) {
+                                logger.info(prefix + "Found JVM matches target pattern. Scanning: Id: " + jvmDescriptor.id() + ", Name: " + jvmDescriptor.displayName());
+                                
+                                logger.info(prefix + "Attaching to the JVM...");
+                                jvm = VirtualMachine.attach(jvmDescriptor.id());
+                                
+                                logger.info(prefix + "Loading agent into JVM...");
+                                jvm.loadAgent(thisJar.getAbsolutePath(), scanHome);
+    
+                                logger.info(prefix + "Returning agent results:");
+                                String results = Files.lines(Paths.get(scanHome + "\\results.txt"), StandardCharsets.US_ASCII)
+                                                    .collect(Collectors.joining(System.lineSeparator()));
+                                logger.info(prefix + "\n" + results);
+    
+                                logger.info(prefix + "Returning agent errors:");
+                                String errors = Files.lines(Paths.get(scanHome + "\\errors.txt"), StandardCharsets.US_ASCII)
+                                                    .collect(Collectors.joining(System.lineSeparator()));
+                                logger.info(prefix + "\n" + errors);
+                            }
+                            else{
+                                logger.info(prefix + "Found JVM does not match target pattern. Skipping: Id: " + jvmDescriptor.id() + ", Name: " + jvmDescriptor.displayName());
+                            }
                         }
-                        else{
-                            logScanInfo(scanId, "Found JVM does not match target pattern. Skipping:");
-                            logScanInfo(scanId, "JVM Id: " + jvmDescriptor.id());
-                            logScanInfo(scanId, "JVM Display Name: " + jvmDescriptor.displayName());
+                        catch (IOException e){
+                            shouldInterrupt = false;
+                            logger.info(prefix + "Caught IOException");
+                            logError(prefix, e);
+                            logger.info(prefix + "Handling caught IOException for class: " + e.getClass().getCanonicalName());
+                        }
+                        catch (Exception e) {
+                            shouldInterrupt = true;
+                            logger.info(prefix + "Caught Exception");
+                            logError(prefix, e);
+                        }
+                        finally{
+                            try{
+                                if(jvm != null){
+                                    logger.info(prefix + "Detaching from JVM instance...");
+                                    jvm.detach();
+                                }
+                            }
+                            catch (IOException e){
+                                shouldInterrupt = false;
+                                logger.info(prefix + "Caught IOException");
+                                logError(prefix, e);
+                                logger.info(prefix + "Handling caught IOException for class: " + e.getClass().getCanonicalName());
+                            }
+                            catch (Exception e) {
+                                shouldInterrupt = true;
+                                logger.info(prefix + "Caught Exception");
+                                logError(prefix, e);
+                            }
+                            
+                            if(shouldInterrupt){
+                                logger.info(prefix + "Interrupting thread...");
+                                Thread.currentThread().interrupt();
+                            }
                         }
                     }
+                    Thread.sleep(scanInterval * 1000);
                 }
-                catch (IOException e){
-                    shouldInterrupt = false;
-                    logScanInfo(scanId, "Caught IOException");
-                    logScanError(scanId, e);
-                    logScanInfo(scanId, "Handling caught IOException for class: " + e.getClass().getCanonicalName());
+                catch (InterruptedException e) {
+                    shouldInterrupt = true;
                 }
                 catch (Exception e) {
                     shouldInterrupt = true;
-                    logScanInfo(scanId, "Caught Exception");
-                    logScanError(scanId, e);
+                    logger.info(prefix + "Caught Exception");
+                    logError(prefix, e);
                 }
                 finally{
-                    try{
-                        if(jvm != null){
-                            logScanInfo(scanId, "Detaching from JVM instance...");
-                            jvm.detach();
-                        }
-                        Thread.sleep(scanInterval * 1000);
-                    }
-                    catch (InterruptedException e) {
-                        shouldInterrupt = true;
-                        logScanInfo(scanId, "Caught InterruptedException");
-                    }
-                    catch (IOException e){
-                        shouldInterrupt = false;
-                        logScanInfo(scanId, "Caught IOException");
-                        logScanError(scanId, e);
-                        logScanInfo(scanId, "Handling caught IOException for class: " + e.getClass().getCanonicalName());
-                    }
-                    catch (Exception e) {
-                        shouldInterrupt = true;
-                        logScanInfo(scanId, "Caught Exception");
-                        logScanError(scanId, e);
-                    }
-                    
-                    logScanInfo(scanId, "Should interrupt: " + shouldInterrupt);
                     if(shouldInterrupt){
-                        logScanInfo(scanId, "Interrupting thread...");
-                        logScanInfo(scanId, "Scan end");
+                        logger.info(prefix + "Interrupting thread...");
                         Thread.currentThread().interrupt();
-                    }
-                    else{
-                        logScanInfo(scanId, "Scan end");
                     }
                 }
             }
