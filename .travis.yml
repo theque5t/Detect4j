@@ -1,4 +1,11 @@
 ---
+env:
+  global:
+    - VERSION="${TRAVIS_TAG}"
+    - NAME=Log4jDetector
+    - LOG4J_DETECTOR_JVM_TARGET_PATTERN=".*Log4jDetector.*"
+    - LOG4J_DETECTOR_SCAN_INTERVAL=5
+    - LOG4J_DETECTOR_TIMEOUT=30
 language: java
 before_install:
   - chmod +x scripts/build.sh scripts/test.sh
@@ -8,11 +15,6 @@ jdk:
   # - openjdk9
   # - openjdk10
   # - openjdk11
-env:
-  global:
-    - VERSION="${TRAVIS_TAG}"
-    - NAME=Log4jDetector
-
 before_script: scripts/build.sh
 script: scripts/test.sh
 jobs:
