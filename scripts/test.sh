@@ -2,8 +2,10 @@
 echo "Starting jar..."
 java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar" &
 DetectorPID=$!
+echo "Waiting 15 seconds..."
+sleep 15
 echo "Stopping jar..."
-(sleep 15 && kill $DetectorPID) || exit 1
+kill $DetectorPID || exit 1
 echo "Testing..."
 declare -a logPatterns=(
     "Searching for JVMs" 
