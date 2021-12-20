@@ -48,7 +48,7 @@ Log4jDetector requires the following to run:
 
 1. Download the runnable [jar](https://github.com/theque5t/Log4jDetector/releases) to system that needs to be scanned.
 ```sh
-wget "https://github.com/theque5t/Log4jDetector/releases/download/v1.0.0/Log4jDetector-v1.0.0.jar"
+wget "https://github.com/theque5t/Log4jDetector/releases/download/v1.0.0-alpha.1/Log4jDetector-v1.0.0-alpha.1.jar"
 ```
 
 ## Usage
