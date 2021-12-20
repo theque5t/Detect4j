@@ -215,13 +215,5 @@ public class Loader {
             logger.info("Caught Exception");
             logError("", e);
         }
-        finally{
-            if(thread != null && thread.isAlive()){
-                thread.interrupt();
-            }
-            if(timer != null){
-                timer.cancel();
-            }
-        }
     }
 }
