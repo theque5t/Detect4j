@@ -18,9 +18,9 @@ for pattern in "${logPatterns[@]}"
 do
     echo "Testing for pattern: $pattern"
     if grep -q "$pattern" "$DetectorLog"; then
-        echo "Passed: $pattern found"
+        echo "Passed for pattern: $pattern"
     else
-        echo "Failed: $pattern found"
+        echo "Failed for pattern: $pattern"
         Failed=true
     fi
 done
