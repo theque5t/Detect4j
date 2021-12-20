@@ -11,11 +11,16 @@ public class Agent {
         FileWriter scanErrorsOverwrite = null;
         FileWriter scanErrorsAppender = null;
         try{
-            File scanResultFile = new File(scanHome + "\\results.txt");
-            scanResultFile.getParentFile().mkdirs();
-            File scanErrorFile = new File(scanHome + "\\errors.txt");
-            scanErrorFile.getParentFile().mkdirs();
+            File scanResultFile = new File(scanHome + "/results.txt");
+            if(!scanResultFile.getParentFile().exists()){
+                scanResultFile.getParentFile().mkdirs();
+            }
 
+            File scanErrorFile = new File(scanHome + "/errors.txt");
+            if(!scanErrorFile.getParentFile().exists()){
+                scanErrorFile.getParentFile().mkdirs();
+            }
+            
             scanResultsOverwrite = new FileWriter(scanResultFile, false);
             scanResultsOverwrite.write("");
             scanErrorsOverwrite = new FileWriter(scanErrorFile, false);
@@ -41,8 +46,10 @@ public class Agent {
             }
         }
         catch(Exception e){
-            File scanErrorFile = new File(scanHome + "\\errors.txt");
-            scanErrorFile.getParentFile().mkdirs();
+            File scanErrorFile = new File(scanHome + "/errors.txt");
+            if(!scanErrorFile.getParentFile().exists()){
+                scanErrorFile.getParentFile().mkdirs();
+            }
             scanErrorsOverwrite = new FileWriter(scanErrorFile, false);
             scanErrorsOverwrite.write("");
             scanErrorsAppender = new FileWriter(scanErrorFile, true);

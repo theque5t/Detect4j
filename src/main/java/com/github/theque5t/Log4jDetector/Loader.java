@@ -89,12 +89,12 @@ public class Loader {
                                 jvm.loadAgent(thisJar.getAbsolutePath(), scanHome);
     
                                 logger.info(prefix + "Returning agent results:");
-                                String results = Files.lines(Paths.get(scanHome + "\\results.txt"), StandardCharsets.US_ASCII)
+                                String results = Files.lines(Paths.get(scanHome + "/results.txt"), StandardCharsets.US_ASCII)
                                                     .collect(Collectors.joining(System.lineSeparator()));
                                 logger.info(prefix + "\n" + results);
     
                                 logger.info(prefix + "Returning agent errors:");
-                                String errors = Files.lines(Paths.get(scanHome + "\\errors.txt"), StandardCharsets.US_ASCII)
+                                String errors = Files.lines(Paths.get(scanHome + "/errors.txt"), StandardCharsets.US_ASCII)
                                                     .collect(Collectors.joining(System.lineSeparator()));
                                 logger.info(prefix + "\n" + errors);
                             }
@@ -167,8 +167,8 @@ public class Loader {
             if(detectorHome == null || detectorHome.isEmpty()){
                 detectorHome = System.getProperty("user.dir");
             }
-            detectorHome = detectorHome + "\\Log4jDetector";
-            String scanHome = detectorHome + "\\scan";
+            detectorHome = detectorHome + "/Log4jDetector";
+            String scanHome = detectorHome + "/scan";
             logger.info("Detector Home: " + detectorHome);
             logger.info("Scan Home: " + scanHome);
 
