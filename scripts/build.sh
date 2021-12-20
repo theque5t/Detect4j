@@ -1,2 +1,2 @@
 #!/bin/bash
-gradle -P version="${VERSION}" clean ShadowJar
+gradle -P version="${VERSION}" clean ShadowJar && ls build/libs/
