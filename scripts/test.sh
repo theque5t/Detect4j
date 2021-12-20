@@ -1,4 +1,5 @@
 #!/bin/bash
+Failed=false
 echo "Starting jar..."
 java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar" &
 DetectorPID=$!
@@ -20,14 +21,14 @@ do
         echo "Passed: $pattern found"
     else
         echo "Failed: $pattern found"
-        failed=true
+        Failed=true
     fi
 done
 echo "Outputting log..."
 echo "<start>"
 cat $DetectorLog
 echo "<end>"
-if $failed; then
+if $Failed; then
     echo "Failed"
     exit 1
 else
