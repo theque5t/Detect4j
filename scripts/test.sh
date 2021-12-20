@@ -1,7 +1,7 @@
 #!/bin/bash
 Failed=false
 echo "Starting jar..."
-java -jar "build/libs/Log4jDetector${VERSION:+-VERSION}.jar" &
+java -jar "build/libs/Log4jDetector${VERSION:+"-$VERSION"}.jar" &
 DetectorPID=$!
 echo "Waiting 15 seconds..."
 sleep 15
