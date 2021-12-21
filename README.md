@@ -2,7 +2,29 @@
 
 [![Build Status](https://app.travis-ci.com/theque5t/Log4jDetector.svg?branch=main)](https://app.travis-ci.com/github/theque5t/Log4jDetector)
 
-Runnable jar that that detects if [Log4j](https://www.google.com/search?q=log4j) is in use within existing JVMs
+## Vision
+ 
+ - A tool that detects if [Log4j](https://www.google.com/search?q=log4j) is in actively in use on a system, and reports what is using it.
+
+## Issue
+
+- File scanning detection methods do not necessarily confirm whether Log4j is actively in use.
+- Transitive dependencies make it difficult to know what (if any) code is using Log4j. It is possible that Log4j may __not__ be explicitly declared in a project, but instead __used indirectly via another dependency__.
+
+## Method
+
+- Runnable jar that that detects if Log4j is in use within existing [Java Virtual Machines (JVM)](https://en.wikipedia.org/wiki/Java_virtual_machine)
+
+### How does it work?
+
+1. Searches for targeted JVMs using target pattern (regex)
+2. Scan each JVM matching the target pattern by:
+    1. Attaching to the JVM
+    2. Loading an agent into the JVM that scans for Log4j classes in use
+    3. Logging what it's doing and what it's finding
+    4. Detach from the JVM
+3. Wait until the next scan interval
+4. Repeat steps 1-3 until exited 
 
 ## Disclaimer
 
