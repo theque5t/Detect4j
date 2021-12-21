@@ -3,6 +3,7 @@ env:
   global:
     - VERSION="${TRAVIS_TAG}"
     - NAME=Log4jDetector
+    - LOG4J_DETECTOR_AGENT_VERSION="v1.0.0-alpha.1"
     - LOG4J_DETECTOR_JVM_TARGET_PATTERN=".*Log4jDetector.*"
     - LOG4J_DETECTOR_SCAN_INTERVAL=5
     - LOG4J_DETECTOR_TIMEOUT=30

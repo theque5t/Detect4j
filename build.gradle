@@ -19,8 +19,6 @@ apply plugin: 'org.kordamp.markdown.convert'
 project.version            = version
 ext.manifestVersion        = '1.0'
 ext.mainClass              = 'com.github.theque5t.Log4jDetector.Loader'
-ext.premainClass           = 'com.github.theque5t.Log4jDetector.Agent'
-ext.agentClass             = 'com.github.theque5t.Log4jDetector.Agent'
 ext.specificationName      = 'com/github/theque5t/Log4jDetector/'
 ext.specificationTitle     = 'Log4j Detector'
 ext.specificationVendor    = 'theque5t'
@@ -36,8 +34,8 @@ repositories {
 }
 
 dependencies {
-	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.16.0'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.16.0'
+	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.0'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.0'
     implementation files(org.gradle.internal.jvm.Jvm.current().toolsJar)
 }
 
@@ -85,11 +83,6 @@ shadowJar {
     manifest {
     	attributes 'Manifest-Version': manifestVersion
         attributes 'Main-Class': mainClass
-        attributes 'Premain-Class': premainClass
-        attributes 'Agent-Class': agentClass
-        attributes 'Can-Redefine-Classes': false
-        attributes 'Can-Retransform-Classes': false
-        attributes 'Can-Set-Native-Method-Prefix': false
 	    attributes 'Name': specificationName
 		attributes 'Specification-Title': specificationTitle
 		attributes 'Specification-Vendor': specificationVendor

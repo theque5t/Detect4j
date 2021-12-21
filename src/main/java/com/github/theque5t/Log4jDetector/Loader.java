@@ -46,11 +46,13 @@ public class Loader {
     }
 
     static class Task implements Runnable {
+        private File detectorAgent;
         private String jvmTargetPattern;
         private String scanHome;
         private Integer scanInterval;
         
-        public Task(String jvmTargetPattern, String scanHome, Integer scanInterval) {
+        public Task(File detectorAgent, String jvmTargetPattern, String scanHome, Integer scanInterval) {
+            this.detectorAgent = detectorAgent;
             this.jvmTargetPattern = jvmTargetPattern;
             this.scanHome = scanHome;
             this.scanInterval = scanInterval;
@@ -80,13 +82,13 @@ public class Loader {
                             String jvmDisplayName = jvmDescriptor.displayName();
                             if (jvmDisplayName.matches(jvmTargetPattern) && !jvmDisplayName.contains(thisJar.getName())) {
                                 logger.info(prefix + "Found JVM matches target pattern. Scanning: Id: " + jvmDescriptor.id() + ", Name: " + jvmDescriptor.displayName());
-                                
+                            
                                 logger.info(prefix + "Attaching to the JVM...");
                                 
                                 jvm = VirtualMachine.attach(jvmDescriptor.id());
                                 
                                 logger.info(prefix + "Loading agent into JVM...");
-                                jvm.loadAgent(thisJar.getAbsolutePath(), scanHome);
+                                jvm.loadAgent(detectorAgent.getAbsolutePath(), scanHome);
     
                                 logger.info(prefix + "Returning agent results:");
                                 String results = Files.lines(Paths.get(scanHome + "/results.txt"), StandardCharsets.US_ASCII)
@@ -133,8 +135,7 @@ public class Loader {
                             }
                             
                             if(shouldInterrupt){
-                                logger.info(prefix + "Interrupting thread...");
-                                Thread.currentThread().interrupt();
+                                throw new InterruptedException();
                             }
                         }
                     }
@@ -163,6 +164,9 @@ public class Loader {
         Thread thread = null;
         Timer timer = null;
         try{
+            File detectorAgent = new File(System.getenv("LOG4J_DETECTOR_AGENT_PATH"));
+            logger.info("Detector Agent: " + detectorAgent.getAbsolutePath());
+
             String detectorHome = System.getenv("LOG4J_DETECTOR_LOG_PATH");
             if(detectorHome == null || detectorHome.isEmpty()){
                 detectorHome = System.getProperty("user.dir");
@@ -199,7 +203,7 @@ public class Loader {
             logger.info("Timeout task: " + timeoutTask);
             logger.info("Timeout (seconds): " + detectorTimeout);
 
-            thread = new Thread(new Task(jvmTargetPattern, scanHome, detectorScanIntervalAsInt));
+            thread = new Thread(new Task(detectorAgent, jvmTargetPattern, scanHome, detectorScanIntervalAsInt));
             if(timeoutTask){ 
                 timer = new Timer();
                 timer.schedule(new TimeOutTask(thread, timer), detectorTimeoutAsInt*1000);

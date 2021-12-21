@@ -1,5 +1,8 @@
 #!/bin/bash
 Failed=false
+echo "Installing Log4jDetectorAgent..."
+wget "https://github.com/theque5t/Log4jDetectorAgent/releases/download/${LOG4J_DETECTOR_AGENT_VERSION}/Log4jDetectorAgent-${LOG4J_DETECTOR_AGENT_VERSION}.jar"
+export LOG4J_DETECTOR_AGENT_PATH="$(pwd)/Log4jDetectorAgent-${LOG4J_DETECTOR_AGENT_VERSION}.jar"
 echo "Starting jar..."
 java -jar "build/libs/Log4jDetector${VERSION:+"-$VERSION"}.jar" &
 DetectorPID=$!
