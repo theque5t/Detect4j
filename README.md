@@ -4,8 +4,6 @@
 
 Runnable jar that that detects if [Log4j](https://www.google.com/search?q=log4j) is in use within existing JVMs
 
-![Demo](./docs/assets/demo.gif)
-
 ## Disclaimer
 
 Please read the [license](./LICENSE). This is a work in progress. Best effort was made to test the software, but it is not guaranteed to work perfectly in all contexts. 
@@ -21,6 +19,7 @@ SOFTWARE.
 ```
 
 ## How does it work?
+
 1. Searches for targeted JVMs using target pattern (regex)
 2. Scan each JVM matching the target pattern by:
     a. Attaching to the JVM
@@ -30,17 +29,12 @@ SOFTWARE.
 3. Wait until the next scan interval
 4. Repeat steps 1-3 until exited 
 
-## Build
-
-```sh
-gradle clean ShadowJar
-```
-
 ## Requirements
 
 Log4jDetector requires the following to run:
 
 - JDK 8+
+- [Log4jDetectorAgent](https://github.com/theque5t/Log4jDetectorAgent#log4jdetectoragent)
 
 ### Operating System
 
@@ -51,7 +45,11 @@ Log4jDetector requires the following to run:
 
 1. Download the runnable [jar](https://github.com/theque5t/Log4jDetector/releases) to system that needs to be scanned.
 ```sh
-wget "https://github.com/theque5t/Log4jDetector/releases/download/v1.0.0-alpha.1/Log4jDetector-v1.0.0-alpha.1.jar"
+wget "https://github.com/theque5t/Log4jDetector/releases/download/v1.0.0-alpha.2/Log4jDetector-v1.0.0-alpha.2.jar"
+```
+2. __If__ the [Log4jDetectorAgent](https://github.com/theque5t/Log4jDetectorAgent#log4jdetectoragent) jar is not already present, [download](https://github.com/theque5t/Log4jDetectorAgent/releases) it as well.
+```sh
+wget "https://github.com/theque5t/Log4jDetectorAgent/releases/download/v1.0.0-alpha.1/Log4jDetectorAgent-v1.0.0-alpha.1.jar"
 ```
 
 ## Usage
@@ -60,53 +58,89 @@ wget "https://github.com/theque5t/Log4jDetector/releases/download/v1.0.0-alpha.1
 
 The following __environment variables__ can be set before running the jar:
 
-- `LOG4J_DETECTOR_LOG_PATH`: Sets the log path for the detector to log to. 
+- `LOG4J_DETECTOR_AGENT_PATH`: The path to the [Log4jDetectorAgent.jar](https://github.com/theque5t/Log4jDetectorAgent#log4jdetectoragent)
+    - Type: File Path
+    - Required: `Yes`
+    - Default: `None`
+- `LOG4J_DETECTOR_LOG_PATH`: The log path for the detector to log to 
     - Type: File Path
     - Required: `No`
     - Default: `System.getProperty("user.dir")` (aka: Current user directory)
-- `LOG4J_DETECTOR_JVM_TARGET_PATTERN`: Set's the JVM target matching pattern (regex)
+- `LOG4J_DETECTOR_JVM_TARGET_PATTERN`: The JVM target matching pattern (regex)
     - Type: Regular Expression
     - Required: `No`
     - Default: `.*` (aka: __All__ JVMs)
+- `LOG4J_DETECTOR_TIMEOUT`: The amount of time (seconds) the detector should run for before exiting
+    - Type: Integer
+    - Required: `No`
+    - Default: `None`
 
-### Scenario: Scan all JVMs
+#### Examples
 
-1. Run the detector
+##### Scenario: Scan all JVMs
+
+1. Set the path to the Log4jDetectorAgent.jar
+```sh
+export LOG4J_DETECTOR_AGENT_PATH=/path/to/Log4jDetectorAgent.jar
+```
+2. Run the detector
 ```sh
 java -jar /path/to/Log4jDetector.jar
 ```
 
-### Scenario: Scan specific JVMs
+##### Scenario: Scan specific JVMs
 
-1. Set environment variable `LOG4J_DETECTOR_JVM_TARGET_PATTERN` equal to target pattern
+1. Set the path to the Log4jDetectorAgent.jar
+```sh
+export LOG4J_DETECTOR_AGENT_PATH=/path/to/Log4jDetectorAgent.jar
+```
+2. Set environment variable `LOG4J_DETECTOR_JVM_TARGET_PATTERN` equal to target pattern
 ```sh
 export LOG4J_DETECTOR_JVM_TARGET_PATTERN=".*MyApp.jar.*"
 ```
-2. Run the detector
+3. Run the detector
 ```sh
 java -jar /path/to/Log4jDetector.jar
 ```
 
-### Scenario: Set specific log path
+##### Scenario: Set specific log path
 
-1. Set environment variable `LOG4J_DETECTOR_LOG_PATH` equal to file path to write logs in
+1. Set the path to the Log4jDetectorAgent.jar
+```sh
+export LOG4J_DETECTOR_AGENT_PATH=/path/to/Log4jDetectorAgent.jar
+```
+2. Set environment variable `LOG4J_DETECTOR_LOG_PATH` equal to file path to write logs in
 ```sh
 export LOG4J_DETECTOR_LOG_PATH="/var/log"
 ```
-2. Run the detector
+3. Run the detector
 ```sh
 java -jar /path/to/Log4jDetector.jar
 ```
 
-### Logs
+##### Scenario: Timeout after 5 minutes
 
-The detector implements Log4j for it's own logging.
+1. Set the path to the Log4jDetectorAgent.jar
+```sh
+export LOG4J_DETECTOR_AGENT_PATH=/path/to/Log4jDetectorAgent.jar
+```
+2. Set environment variable `LOG4J_DETECTOR_TIMEOUT` equal to 300 seconds (5 minutes)
+```sh
+export LOG4J_DETECTOR_TIMEOUT=300
+```
+3. Run the detector
+```sh
+java -jar /path/to/Log4jDetector.jar
+```
 
-#### Logging Format
+### Output Format
 
-See [log4j2.properties](./src/main/resources/log4j2.properties) file.
+The detector implements Log4j for it's console output and file logging.
 
-#### Logging Scans
+- Log4j dependencies: See `dependencies` block in [build.gradle](./build.gradle) file
+- Log4j configuration: See [log4j2.properties](./src/main/resources/log4j2.properties) file
+
+#### Scans
 
 Each scan is tagged with an id. The log entries associated to the scan are prefixed with the id. For example, the value `be30856f0d4148149907787f344c804f` in the log below is the scan id. This helps facilitate grouping log entries in various log aggregators (e.g. [Splunk® Transaction](https://docs.splunk.com/Documentation/Splunk/latest/SearchReference/Transaction))
 
@@ -134,7 +168,7 @@ Package Implementation Vendor: The Apache Software Foundation
 Package Implementation Version: 2.13.3
 ```
 
-#### Logging Detections
+#### Detections
 
 When a detection occurs, a log entry like the following will occur:
 
@@ -153,7 +187,21 @@ Package Implementation Version: <package implementation version>
 ...
 ```
 
-## Contributing
+## Development
+
+### Issue Tracker
+Please use the [repo issues](https://github.com/theque5t/Log4jDetector/issues)
+
+### Builds
+* Build using [Gradle](https://gradle.org/). See [build.gradle](./build.gradle) file
+* Build locally using the [build.sh](./scripts/build.sh) script
+* Remote builds by [Travis CI](https://app.travis-ci.com/github/theque5t/Log4jDetector)
+* Builds served via [repo releases](https://github.com/theque5t/Log4jDetector/releases)
+
+### Testing
+* Testing is performed during remote builds using the [test.sh](./scripts/test.sh) script
+
+### Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to test as appropriate.
