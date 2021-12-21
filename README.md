@@ -40,17 +40,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## How does it work?
-
-1. Searches for targeted JVMs using target pattern (regex)
-2. Scan each JVM matching the target pattern by:
-    a. Attaching to the JVM
-    b. Loading an agent into the JVM that scans for Log4j classes in use
-    c. Logging what it's doing and what it's finding
-    d. Detach from the JVM
-3. Wait until the next scan interval
-4. Repeat steps 1-3 until exited 
-
 ## Requirements
 
 Log4jDetector requires the following to run:
