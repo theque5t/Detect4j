@@ -4,7 +4,7 @@
 
 ## Vision
  
- - A tool that detects if [Log4j](https://www.google.com/search?q=log4j) is in actively in use on a system, and reports what is using it.
+ - A tool that detects if [Log4j](https://www.google.com/search?q=log4j) is actively in use on a system, and reports what is using it.
 
 ## Issue
 
