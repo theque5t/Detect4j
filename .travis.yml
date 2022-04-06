@@ -34,12 +34,14 @@ jobs:
   - stage: test
     language: shell
     os: windows
+    env: YARN_GPG=no
     before_install:
     - export JAVA_HOME=${JAVA_HOME:-/c/jdk}
     - export PATH=${JAVA_HOME}/bin:${PATH}
-    - choco install jdk8 -params 'installdir=c:\\jdk' -y
-    - choco install gradle --version=5.1
+    - choco install openjdk8 -params 'installdir=c:\\jdk' -y
     - java -version
+    - choco install gradle --version=5.1
+    - gradle -version
   - stage: deploy
     # before_install:
     # - chmod +x scripts/build.sh scripts/test.sh
