@@ -161,7 +161,7 @@ The detector implements Log4j for it's console output and file logging.
 
 Each scan is tagged with an id. The log entries associated to the scan are prefixed with the id. For example, the value `d56e68373342430e860cc3df14a11e0e` in the log below is the scan id. This helps facilitate grouping log entries in various log aggregators (e.g. [Splunk® Transaction](https://docs.splunk.com/Documentation/Splunk/latest/SearchReference/Transaction))
 
-```log
+```text
 2022-04-05T18:15:02,571-0600 INFO [Loader.main:171] - Detector Agent: /mnt/c/test/Detect4jAgent.jar
 2022-04-05T18:15:02,573-0600 INFO [Loader.main:179] - Detector Home: /mnt/c/test/Detect4j
 2022-04-05T18:15:02,574-0600 INFO [Loader.main:180] - Scan Home: /mnt/c/test/Detect4j/scan
