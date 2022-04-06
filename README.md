@@ -57,11 +57,11 @@ Detect4j requires the following to run:
 
 1. Download the runnable [jar](https://github.com/theque5t/Detect4j/releases) to the system that needs to be scanned.
 ```sh
-curl "https://github.com/theque5t/Detect4j/releases/download/v1.0.0-alpha.3/Detect4j-v1.0.0-alpha.3.jar" -o "Detect4j.jar"
+curl -L "https://github.com/theque5t/Detect4j/releases/download/v1.0.0-alpha.3/Detect4j-v1.0.0-alpha.3-linux.jar" -o "Detect4j.jar"
 ```
 2. __If__ the [Detect4jAgent](https://github.com/theque5t/Detect4jAgent#detect4jagent) jar is not already present, [download](https://github.com/theque5t/Detect4jAgent/releases) it as well.
 ```sh
-curl "https://github.com/theque5t/Detect4jAgent/releases/download/v1.0.0-alpha.2/Detect4jAgent-v1.0.0-alpha.2.jar" -o "Detect4jAgent.jar"
+curl -L "https://github.com/theque5t/Detect4jAgent/releases/download/v1.0.0-alpha.2/Detect4jAgent-v1.0.0-alpha.2.jar" -o "Detect4jAgent.jar"
 ```
 
 ## Usage
