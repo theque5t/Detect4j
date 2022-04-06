@@ -1,18 +1,18 @@
 ---
 env:
   global:
-    - VERSION="${TRAVIS_TAG}"
-    - NAME=Log4jDetector
-    - LOG4J_DETECTOR_AGENT_VERSION="v1.0.0-alpha.1"
-    - LOG4J_DETECTOR_JVM_TARGET_PATTERN=".*Log4jDetector.*"
-    - LOG4J_DETECTOR_SCAN_INTERVAL=5
-    - LOG4J_DETECTOR_TIMEOUT=30
+  - VERSION="${TRAVIS_TAG}"
+  - NAME=Detect4j
+  - DETECTOR_AGENT_VERSION="v1.0.0-alpha.1"
+  - DETECTOR_JVM_TARGET_PATTERN=".*Detect4j.*"
+  - DETECTOR_SCAN_INTERVAL=5
+  - DETECTOR_TIMEOUT=30
 language: java
 before_install:
-  - chmod +x scripts/build.sh scripts/test.sh
+- chmod +x scripts/build.sh scripts/test.sh
 install: true
 jdk:
-  - openjdk8
+- openjdk8
   # - openjdk9
   # - openjdk10
   # - openjdk11
@@ -20,21 +20,21 @@ before_script: scripts/build.sh
 script: scripts/test.sh
 jobs:
   include:
-    - stage: deploy
-      before_install:
-        - chmod +x scripts/build.sh scripts/test.sh
-      install: true
-      jdk: openjdk8
-      before_script: scripts/build.sh
-      script: scripts/test.sh
-      deploy:
-        provider: releases
-        api_key:
-          secure: "RQEHknyv7rEdrjbxmnXK6bq23ge1M1uVhweSErYYJVuHLEJeVDGk/mRYLu2/U8tPjERWxCD9ctqd2Adl3gj64AvYrnoos32JbQdjyeyRa4TO+VXo2YtUJN3Sbf68vSJzK4sqtOyNqj32KlUwQtjJsFMyiXkjUOriDkB9HnGwTquTEwYeve/GSQnx3K9pgmDpX00yMooDGcYDHk3hpp2n8WBqxdBbQTYkbdLExntw4i6l/g8BZjC66NUqtvnZrfP0Mrq7uyc8I3O2gKaDS5j4ZUkhrcdK4iTD4l0ISuG2vpswm0XT2p/ecgpsPuAe4knHf8xPwfja5a0LUJDk3JptmUYP981YCH3yvSH8kDeP0fPATOFmFrxDUQz9N2NMoJwnr/2nCtgr9YR12xNon/lwnlVS4fRVKkkJ68YNIhbkr99L/s+A3RZd7me8sKCZLcQ7sDkGXt2i5Mb193INoBVV2u+HmnEiQFL9Mszgb67QCcDBmut6WuftahLjMvpqHZ8OsqgoWg2Sh8r5Nh8mwjB1WgCGwwzIM4uDTfNMNRjBwX8MUf1zvXgWturU1o9tLoW1NKbPd/aNwzY6R9WbMe8sbpTjb2DWxcLRFAmU5ZN3NvqddYvJ5x0eYsC5OqYX17usDuLUvmsdBb6cEI5zJh2mO/DxPvev8OshsINTUVVbA5c="
-        file_glob: true
-        file: 
-          - build/libs/*
-        skip_cleanup: true
-        on:
-          repo: theque5t/Log4jDetector
-          tags: true
+  - stage: deploy
+    before_install:
+    - chmod +x scripts/build.sh scripts/test.sh
+    install: true
+    jdk: openjdk8
+    before_script: scripts/build.sh
+    script: scripts/test.sh
+    deploy:
+      provider: releases
+      api_key:
+        secure: WP+Dzf61Y7RpB3YEMzJdppWFuMdztEhmBVHgpIOE5a4Bd0xwgGGRpf8ESpoM/yjQ9etYLavqZ8Zsvc+2f5QKvWsWVC3J6M3IcicLH3Fbc0wwv3v1YmzX0xhfgpFM8T500BXiMkuvyT8k6av2KDI/Woz7bQqPK1inS0Otsdp04BAQTiCqz+vT9SI3I0WBGLEh/rKkPOGecOWqPVkOlz+jJNoRG9DUnQ/rHVlVy7a1zg4vkyvVnYIa5cAWsE+dbPvgwy3bJ3uURkO2MfixL8faTQrWfVMFT6TREEYp2UpU+ndzWOpVMu4uqdxJPzF69BOYjXg1TIMRaw3iej0PQE6dW8gnJ4s1QzCc1tyJBEJ3IRWFycIta1zm9uP8NjTaLQUX5mJBDzNC7Nl/e3BILmoT7NqqcaLJ7vziUXKhfiYLUk5QynSuAQH75gNjzPlBaIS8aV5lHF4IyrGvtGj9CKos2K7qUiUY1ogSh8f6FND+Cw2tDzhDEQkL4rLBejviNwkVGOGjvs2+3i3lZ/SM5Jo4N1EDaYadaceecafA2Jcjr3aCqOL04VXeSxcJ5FcqoFTE644EduAaOpmGsyFPDh2/pWqnEF3ZCtK/fWS8nt0CPjLdVtS/5Uk56U7Ni2/yhuqF4Nvpc+nEQ7VuIMgg7cSMTsEYfQ+Xe//iV7b8rr27boU=
+      file_glob: true
+      file:
+      - build/libs/*
+      skip_cleanup: true
+      on:
+        repo: theque5t/Detect4j
+        tags: true

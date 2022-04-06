@@ -1,10 +1,10 @@
 #!/bin/bash
 Failed=false
-echo "Installing Log4jDetectorAgent..."
-wget "https://github.com/theque5t/Log4jDetectorAgent/releases/download/${LOG4J_DETECTOR_AGENT_VERSION}/Log4jDetectorAgent-${LOG4J_DETECTOR_AGENT_VERSION}.jar"
-export LOG4J_DETECTOR_AGENT_PATH="$(pwd)/Log4jDetectorAgent-${LOG4J_DETECTOR_AGENT_VERSION}.jar"
+echo "Installing Detect4jAgent..."
+wget "https://github.com/theque5t/Detect4jAgent/releases/download/${DETECTOR_AGENT_VERSION}/Detect4jAgent-${DETECTOR_AGENT_VERSION}.jar"
+export DETECTOR_AGENT_PATH="$(pwd)/Detect4jAgent-${DETECTOR_AGENT_VERSION}.jar"
 echo "Starting jar..."
-java -jar "build/libs/Log4jDetector${VERSION:+"-$VERSION"}.jar" &
+java -jar "build/libs/Detect4j${VERSION:+"-$VERSION"}.jar" &
 DetectorPID=$!
 echo "Waiting 15 seconds..."
 sleep 15
@@ -16,7 +16,7 @@ declare -a logPatterns=(
     "Found JVM"
     "does not match target pattern"
 )
-DetectorLog="Log4jDetector/log/app.log"
+DetectorLog="Detect4j/log/app.log"
 for pattern in "${logPatterns[@]}"
 do
     echo "Testing for pattern: $pattern"

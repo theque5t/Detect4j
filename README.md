@@ -1,8 +1,8 @@
-# Log4jDetector
+# Detect4j
 
-[![Build Status](https://app.travis-ci.com/theque5t/Log4jDetector.svg?branch=main)](https://app.travis-ci.com/github/theque5t/Log4jDetector)
+[![Build Status](https://app.travis-ci.com/theque5t/Detect4j.svg?branch=main)](https://app.travis-ci.com/github/theque5t/Detect4j)
 
-Runnable jar that that detects if [Log4j](https://www.google.com/search?q=log4j) is in use within existing JVMs
+Runnable jar that will detect for specific classes in use within existing JVMs
 
 ## Disclaimer
 
@@ -23,7 +23,7 @@ SOFTWARE.
 1. Searches for targeted JVMs using target pattern (regex)
 2. Scan each JVM matching the target pattern by:
     a. Attaching to the JVM
-    b. Loading an agent into the JVM that scans for Log4j classes in use
+    b. Loading an agent into the JVM that scans for classes in use that match the target pattern (regex)
     c. Logging what it's doing and what it's finding
     d. Detach from the JVM
 3. Wait until the next scan interval
@@ -31,25 +31,26 @@ SOFTWARE.
 
 ## Requirements
 
-Log4jDetector requires the following to run:
+Detect4j requires the following to run:
 
 - JDK 8+
-- [Log4jDetectorAgent](https://github.com/theque5t/Log4jDetectorAgent#log4jdetectoragent)
+- [Detect4jAgent](https://github.com/theque5t/Detect4jAgent#detect4jagent)
 
 ### Operating System
 
 - Linux: All releases are currently for use on Linux.
 - Windows: Work In Progress. Currently not for use on Windows.
+- Mac: Currently not for use on Mac.
 
 ## Installation
 
-1. Download the runnable [jar](https://github.com/theque5t/Log4jDetector/releases) to system that needs to be scanned.
+1. Download the runnable [jar](https://github.com/theque5t/Detect4j/releases) to the system that needs to be scanned.
 ```sh
-wget "https://github.com/theque5t/Log4jDetector/releases/download/v1.0.0-alpha.2/Log4jDetector-v1.0.0-alpha.2.jar"
+curl "https://github.com/theque5t/Detect4j/releases/download/v1.0.0-alpha.3/Detect4j-v1.0.0-alpha.3.jar" -o "Detect4j.jar"
 ```
-2. __If__ the [Log4jDetectorAgent](https://github.com/theque5t/Log4jDetectorAgent#log4jdetectoragent) jar is not already present, [download](https://github.com/theque5t/Log4jDetectorAgent/releases) it as well.
+2. __If__ the [Detect4jAgent](https://github.com/theque5t/Detect4jAgent#detect4jagent) jar is not already present, [download](https://github.com/theque5t/Detect4jAgent/releases) it as well.
 ```sh
-wget "https://github.com/theque5t/Log4jDetectorAgent/releases/download/v1.0.0-alpha.1/Log4jDetectorAgent-v1.0.0-alpha.1.jar"
+curl "https://github.com/theque5t/Detect4jAgent/releases/download/v1.0.0-alpha.2/Detect4jAgent-v1.0.0-alpha.2.jar" -o "Detect4jAgent.jar"
 ```
 
 ## Usage
@@ -58,79 +59,95 @@ wget "https://github.com/theque5t/Log4jDetectorAgent/releases/download/v1.0.0-al
 
 The following __environment variables__ can be set before running the jar:
 
-- `LOG4J_DETECTOR_AGENT_PATH`: The path to the [Log4jDetectorAgent.jar](https://github.com/theque5t/Log4jDetectorAgent#log4jdetectoragent)
+- `DETECTOR_AGENT_PATH`: The path to the [Detect4jAgent.jar](https://github.com/theque5t/Detect4jAgent#detect4jagent)
     - Type: File Path
     - Required: `Yes`
     - Default: `None`
-- `LOG4J_DETECTOR_LOG_PATH`: The log path for the detector to log to 
+- `DETECTOR_LOG_PATH`: The log path for the detector to log to 
     - Type: File Path
     - Required: `No`
     - Default: `System.getProperty("user.dir")` (aka: Current user directory)
-- `LOG4J_DETECTOR_JVM_TARGET_PATTERN`: The JVM target matching pattern (regex)
+- `DETECTOR_JVM_TARGET_PATTERN`: The JVM target matching pattern
     - Type: Regular Expression
     - Required: `No`
     - Default: `.*` (aka: __All__ JVMs)
-- `LOG4J_DETECTOR_TIMEOUT`: The amount of time (seconds) the detector should run for before exiting
+- `DETECTOR_SCAN_INTERVAL`: The time interval (seconds) in between each scan / Delay between scans
+    - Type: Integer
+    - Required: `No`
+    - Default: `900` (900 seconds / 15 minutes)
+- `DETECTOR_SCAN_TARGET_PATTERN`: The class target matching pattern
+    - Type: Regular Expression
+    - Required: `No`
+    - Default: `.*` (aka: __All__ classes)
+- `DETECTOR_TIMEOUT`: The amount of time (seconds) the detector should run for before exiting
     - Type: Integer
     - Required: `No`
     - Default: `None`
 
 #### Examples
 
-##### Scenario: Scan all JVMs
+##### Scenario: Scan all JVMs for classes in use matching Log4j or Spring 
 
-1. Set the path to the Log4jDetectorAgent.jar
+1. Set the path to the Detect4jAgent.jar
 ```sh
-export LOG4J_DETECTOR_AGENT_PATH=/path/to/Log4jDetectorAgent.jar
+export DETECTOR_AGENT_PATH=/path/to/Detect4jAgent.jar
 ```
-2. Run the detector
+2. Set environment variable `DETECTOR_SCAN_TARGET_PATTERN` equal to target pattern
 ```sh
-java -jar /path/to/Log4jDetector.jar
-```
-
-##### Scenario: Scan specific JVMs
-
-1. Set the path to the Log4jDetectorAgent.jar
-```sh
-export LOG4J_DETECTOR_AGENT_PATH=/path/to/Log4jDetectorAgent.jar
-```
-2. Set environment variable `LOG4J_DETECTOR_JVM_TARGET_PATTERN` equal to target pattern
-```sh
-export LOG4J_DETECTOR_JVM_TARGET_PATTERN=".*MyApp.jar.*"
+export DETECTOR_SCAN_TARGET_PATTERN=".*log4j.*|.*spring.*"
 ```
 3. Run the detector
 ```sh
-java -jar /path/to/Log4jDetector.jar
+java -jar /path/to/Detect4j.jar
+```
+
+##### Scenario: Scan specific JVMs every 5 minutes
+
+1. Set the path to the Detect4jAgent.jar
+```sh
+export DETECTOR_AGENT_PATH=/path/to/Detect4jAgent.jar
+```
+2. Set environment variable `DETECTOR_JVM_TARGET_PATTERN` equal to target pattern
+```sh
+export DETECTOR_JVM_TARGET_PATTERN=".*MyApp.jar.*"
+```
+3. Set environment variable `DETECTOR_SCAN_INTERVAL` equal to 300 seconds
+```sh
+export DETECTOR_SCAN_INTERVAL="300"
+```
+4. Run the detector
+```sh
+java -jar /path/to/Detect4j.jar
 ```
 
 ##### Scenario: Set specific log path
 
-1. Set the path to the Log4jDetectorAgent.jar
+1. Set the path to the Detect4jAgent.jar
 ```sh
-export LOG4J_DETECTOR_AGENT_PATH=/path/to/Log4jDetectorAgent.jar
+export DETECTOR_AGENT_PATH=/path/to/Detect4jAgent.jar
 ```
-2. Set environment variable `LOG4J_DETECTOR_LOG_PATH` equal to file path to write logs in
+2. Set environment variable `DETECTOR_LOG_PATH` equal to file path to write logs in
 ```sh
-export LOG4J_DETECTOR_LOG_PATH="/var/log"
+export DETECTOR_LOG_PATH="/var/log"
 ```
 3. Run the detector
 ```sh
-java -jar /path/to/Log4jDetector.jar
+java -jar /path/to/Detect4j.jar
 ```
 
 ##### Scenario: Timeout after 5 minutes
 
-1. Set the path to the Log4jDetectorAgent.jar
+1. Set the path to the Detect4jAgent.jar
 ```sh
-export LOG4J_DETECTOR_AGENT_PATH=/path/to/Log4jDetectorAgent.jar
+export DETECTOR_AGENT_PATH=/path/to/Detect4jAgent.jar
 ```
-2. Set environment variable `LOG4J_DETECTOR_TIMEOUT` equal to 300 seconds (5 minutes)
+2. Set environment variable `DETECTOR_TIMEOUT` equal to 300 seconds (5 minutes)
 ```sh
-export LOG4J_DETECTOR_TIMEOUT=300
+export DETECTOR_TIMEOUT=300
 ```
 3. Run the detector
 ```sh
-java -jar /path/to/Log4jDetector.jar
+java -jar /path/to/Detect4j.jar
 ```
 
 ### Output Format
@@ -142,30 +159,54 @@ The detector implements Log4j for it's console output and file logging.
 
 #### Scans
 
-Each scan is tagged with an id. The log entries associated to the scan are prefixed with the id. For example, the value `be30856f0d4148149907787f344c804f` in the log below is the scan id. This helps facilitate grouping log entries in various log aggregators (e.g. [Splunk® Transaction](https://docs.splunk.com/Documentation/Splunk/latest/SearchReference/Transaction))
+Each scan is tagged with an id. The log entries associated to the scan are prefixed with the id. For example, the value `d56e68373342430e860cc3df14a11e0e` in the log below is the scan id. This helps facilitate grouping log entries in various log aggregators (e.g. [Splunk® Transaction](https://docs.splunk.com/Documentation/Splunk/latest/SearchReference/Transaction))
 
 ```
-2021-12-16T02:47:03,503-0600 INFO [Loader.run:49] - [be30856f0d4148149907787f344c804f] Scan start
-2021-12-16T02:47:03,504-0600 INFO [Loader.run:56] - [be30856f0d4148149907787f344c804f] Searching for JVMs...
-2021-12-16T02:47:03,585-0600 INFO [Loader.run:59] - [be30856f0d4148149907787f344c804f] Found JVM: Log4jTestApp.jar
-2021-12-16T02:47:03,586-0600 INFO [Loader.run:59] - [be30856f0d4148149907787f344c804f] Found JVM: com.github.badsyntax.gradle.GradleServer 63727
-2021-12-16T02:47:03,588-0600 INFO [Loader.run:64] - [be30856f0d4148149907787f344c804f] Found JVM matches target pattern:
-2021-12-16T02:47:03,589-0600 INFO [Loader.run:65] - [be30856f0d4148149907787f344c804f] JVM Id: 32572
-2021-12-16T02:47:03,590-0600 INFO [Loader.run:66] - [be30856f0d4148149907787f344c804f] JVM Display Name: Log4jTestApp.jar
-2021-12-16T02:47:03,590-0600 INFO [Loader.run:68] - [be30856f0d4148149907787f344c804f] Attaching to the JVM...
-2021-12-16T02:47:03,600-0600 INFO [Loader.run:71] - [be30856f0d4148149907787f344c804f] Loading agent into JVM...
-2021-12-16T02:47:03,665-0600 INFO [Loader.run:74] - [be30856f0d4148149907787f344c804f] Returning agent results:
-2021-12-16T02:47:03,669-0600 INFO [Loader.run:76] - [be30856f0d4148149907787f344c804f] 
-Detected log4j class loaded: 
-Class Name: org.apache.logging.log4j.core.util.BasicAuthorizationProvider$$Lambda$53/0x0000000800115040
-Class Location: <SENSORED>/Log4jTestApp/log4j-2.13.3/log4j-core.jar
-Package Name: org.apache.logging.log4j.core.util
-Package Specification Title: Apache Log4j Core
+2022-04-05T18:15:02,571-0600 INFO [Loader.main:171] - Detector Agent: /mnt/c/test/Detect4jAgent.jar
+2022-04-05T18:15:02,573-0600 INFO [Loader.main:179] - Detector Home: /mnt/c/test/Detect4j
+2022-04-05T18:15:02,574-0600 INFO [Loader.main:180] - Scan Home: /mnt/c/test/Detect4j/scan
+2022-04-05T18:15:02,574-0600 INFO [Loader.main:187] - Scan interval: Every 30 seconds
+2022-04-05T18:15:02,574-0600 INFO [Loader.main:197] - Target Scan Pattern: .*log4j.*|.*spring.*
+2022-04-05T18:15:02,574-0600 INFO [Loader.main:207] - Target JVM Pattern: .*TestApp.*
+2022-04-05T18:15:02,574-0600 INFO [Loader.main:216] - Timeout task: false
+2022-04-05T18:15:02,575-0600 INFO [Loader.main:217] - Timeout (seconds): null
+2022-04-05T18:15:03,504-0600 INFO [Loader.run:56] - [d56e68373342430e860cc3df14a11e0e] Searching for JVMs...
+2022-04-05T18:15:03,585-0600 INFO [Loader.run:59] - [d56e68373342430e860cc3df14a11e0e] Found JVM: TestApp.war
+2022-04-05T18:15:03,586-0600 INFO [Loader.run:59] - [d56e68373342430e860cc3df14a11e0e] Found JVM: com.github.badsyntax.gradle.GradleServer 63727
+2022-04-05T18:15:03,588-0600 INFO [Loader.run:64] - [d56e68373342430e860cc3df14a11e0e] Found JVM matches target pattern:
+2022-04-05T18:15:03,589-0600 INFO [Loader.run:65] - [d56e68373342430e860cc3df14a11e0e] JVM Id: 32572
+2022-04-05T18:15:03,590-0600 INFO [Loader.run:66] - [d56e68373342430e860cc3df14a11e0e] JVM Display Name: TestApp.war
+2022-04-05T18:15:03,590-0600 INFO [Loader.run:68] - [d56e68373342430e860cc3df14a11e0e] Attaching to the JVM...
+2022-04-05T18:15:03,600-0600 INFO [Loader.run:71] - [d56e68373342430e860cc3df14a11e0e] Loading agent into JVM...
+2022-04-05T18:15:03,665-0600 INFO [Loader.run:74] - [d56e68373342430e860cc3df14a11e0e] Returning agent results:
+2022-04-05T18:15:03,669-0600 INFO [Loader.run:76] - [d56e68373342430e860cc3df14a11e0e] 
+...
+Detected class matching scan target pattern loaded: 
+Class Name: org.springframework.security.web.util.matcher.AntPathRequestMatcher$SubpathMatcher
+Class Location: file:<SENSORED>/TestApp.war!/WEB-INF/lib/spring-security-web-5.2.0.RELEASE.jar!/
+Package Name: org.springframework.security.web.util.matcher
+Package Specification Title: null
+Package Specification Vendor: null
+Package Specification Version: null
+Package Implementation Title: spring-security-web
+Package Implementation Vendor: null
+Package Implementation Version: 5.2.0.RELEASE
+Detected class matching scan target pattern loaded: 
+Class Name: org.apache.logging.log4j.message.Clearable
+Class Location: file:<SENSORED>/TestApp.war!/WEB-INF/lib/log4j-api-2.16.0.jar!/
+Package Name: org.apache.logging.log4j.message
+Package Specification Title: Apache Log4j API
 Package Specification Vendor: The Apache Software Foundation
-Package Specification Version: 2.13.3
-Package Implementation Title: Apache Log4j Core
+Package Specification Version: 2.16.0
+Package Implementation Title: Apache Log4j API
 Package Implementation Vendor: The Apache Software Foundation
-Package Implementation Version: 2.13.3
+Package Implementation Version: 2.16.0
+...
+2022-04-05T18:15:03,669-0600 INFO [Loader.run:101] - [d56e68373342430e860cc3df14a11e0e] Returning agent errors:
+2022-04-05T18:15:03,669-0600 INFO [Loader.run:104] - [d56e68373342430e860cc3df14a11e0e] 
+
+2022-04-05T18:15:03,669-0600 INFO [Loader.run:124] - [d56e68373342430e860cc3df14a11e0e] Detaching from JVM instance...
+2022-04-05T18:15:03,669-0600 INFO [Loader.run:145] - Waiting for next scan... If not interrupted next scan starts in 30 seconds
 ```
 
 #### Detections
@@ -174,7 +215,7 @@ When a detection occurs, a log entry like the following will occur:
 
 ```
 ...
-Detected log4j class loaded: 
+Detected class matching scan target pattern loaded: 
 Class Name: <class name>
 Class Location: <class location>
 Package Name: <package name>
@@ -190,13 +231,13 @@ Package Implementation Version: <package implementation version>
 ## Development
 
 ### Issue Tracker
-Please use the [repo issues](https://github.com/theque5t/Log4jDetector/issues)
+Please use the [repo issues](https://github.com/theque5t/Detect4j/issues)
 
 ### Builds
 * Build using [Gradle](https://gradle.org/). See [build.gradle](./build.gradle) file
 * Build locally using the [build.sh](./scripts/build.sh) script
-* Remote builds by [Travis CI](https://app.travis-ci.com/github/theque5t/Log4jDetector)
-* Builds served via [repo releases](https://github.com/theque5t/Log4jDetector/releases)
+* Remote builds by [Travis CI](https://app.travis-ci.com/github/theque5t/Detect4j)
+* Builds served via [repo releases](https://github.com/theque5t/Detect4j/releases)
 
 ### Testing
 * Testing is performed during remote builds using the [test.sh](./scripts/test.sh) script
@@ -211,7 +252,7 @@ Please make sure to test as appropriate.
 
 ## Acknowledgements
 
-Log4jDetector makes use of the open source projects listed on the [index.md](build/reports/index.md) in the build/reports directory. [Click here](build/reports/index.md) to be automatically redirected to the [index.md](build/reports/index.md).
+Detect4j makes use of the open source projects listed on the [index.md](build/reports/index.md) in the build/reports directory. [Click here](build/reports/index.md) to be automatically redirected to the [index.md](build/reports/index.md).
 
 ## Donations
 

@@ -18,14 +18,14 @@ apply plugin: 'org.kordamp.markdown.convert'
 
 project.version            = version
 ext.manifestVersion        = '1.0'
-ext.mainClass              = 'com.github.theque5t.Log4jDetector.Loader'
-ext.specificationName      = 'com/github/theque5t/Log4jDetector/'
-ext.specificationTitle     = 'Log4j Detector'
+ext.mainClass              = 'com.github.theque5t.Detect4j.Loader'
+ext.specificationName      = 'com/github/theque5t/Detect4j/'
+ext.specificationTitle     = 'Detect4j'
 ext.specificationVendor    = 'theque5t'
 ext.specificationVersion   = '1.0.0'
 ext.implementationVendor   = 'theque5t'
-ext.implementationVendorId = 'com.github.theque5t.Log4jDetector'
-ext.implementationURL      = 'https://github.com/theque5t/Log4jDetector'
+ext.implementationVendorId = 'com.github.theque5t.Detect4j'
+ext.implementationURL      = 'https://github.com/theque5t/Detect4j'
 ext.licenseTitle           = 'MIT License'
 ext.dependencyIndex        = 'index.md'
 
@@ -34,8 +34,8 @@ repositories {
 }
 
 dependencies {
-	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.0'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.0'
+	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.2'
     implementation files(org.gradle.internal.jvm.Jvm.current().toolsJar)
 }
 
