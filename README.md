@@ -4,6 +4,30 @@
 
 Runnable jar that will detect for specific classes in use within existing JVMs
 
+## Vision
+ 
+ - A tool that detects if a specific Java class(es) is actively in use on a system.
+
+## Issue
+
+- File scanning detection methods do not necessarily confirm whether a specific class is actively in use.
+- Transitive dependencies make it difficult to know what (if any) code is using a specific class. It is possible that there may __not__ be a dependency explicitly declared in a project, but instead __used indirectly via another dependency__.
+
+## Method
+
+- Runnable jar that that detects if a specific class(es) is in use within existing [Java Virtual Machines (JVM)](https://en.wikipedia.org/wiki/Java_virtual_machine)
+
+## How does it work?
+
+1. Searches for targeted JVMs using target pattern (regex)
+2. Scan each JVM matching the target pattern by:  
+    a. Attaching to the JVM  
+    b. Loading an agent into the JVM that scans for classes in use that match the target pattern (regex)  
+    c. Logging what it's doing and what it's finding  
+    d. Detach from the JVM
+3. Wait until the next scan interval
+4. Repeat steps 1-3 until exited 
+
 ## Disclaimer
 
 Please read the [license](./LICENSE). This is a work in progress. Best effort was made to test the software, but it is not guaranteed to work perfectly in all contexts. 
@@ -17,17 +41,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
-
-## How does it work?
-
-1. Searches for targeted JVMs using target pattern (regex)
-2. Scan each JVM matching the target pattern by:  
-    a. Attaching to the JVM  
-    b. Loading an agent into the JVM that scans for classes in use that match the target pattern (regex)  
-    c. Logging what it's doing and what it's finding  
-    d. Detach from the JVM
-3. Wait until the next scan interval
-4. Repeat steps 1-3 until exited 
 
 ## Requirements
 
