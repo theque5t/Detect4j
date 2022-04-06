@@ -40,7 +40,7 @@ jobs:
     # - export PATH=${JAVA_HOME}/bin:${PATH}
     # - choco install openjdk8 -params 'installdir=c:\\jdk' -y
     - choco install openjdk8
-    - export JAVA_HOME=$(which java)
+    - $env:JAVA_HOME=$(Get-Command java).Path | Split-Path
     - choco install gradle --version=5.1
   - stage: deploy
     # before_install:
