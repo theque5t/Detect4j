@@ -17,6 +17,7 @@ apply plugin: 'com.github.jk1.dependency-license-report'
 apply plugin: 'org.kordamp.markdown.convert'
 
 project.version            = version
+ext.os                     = project.properties['os'] ?: null
 ext.manifestVersion        = '1.0'
 ext.mainClass              = 'com.github.theque5t.Detect4j.Loader'
 ext.specificationName      = 'com/github/theque5t/Detect4j/'
@@ -78,8 +79,8 @@ task cleanUpReports(type: Delete){
 }
 
 shadowJar {
+    archiveClassifier.set(os)
     from "$buildDir/output"
-    classifier = null
     manifest {
     	attributes 'Manifest-Version': manifestVersion
         attributes 'Main-Class': mainClass

@@ -28,7 +28,7 @@ Dependency License Report for Detect4j
 
 --------------------
 
-This report was generated at  *Tue Apr 05 21:24:24 CDT 2022* .
+This report was generated at  *Wed Apr 06 00:30:54 CDT 2022* .
 
 
 [https_www.apache.org_licenses_LICENSE-2.0.txt]: https://www.apache.org/licenses/LICENSE-2.0.txt

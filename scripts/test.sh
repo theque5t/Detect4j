@@ -4,7 +4,7 @@ echo "Installing Detect4jAgent..."
 wget "https://github.com/theque5t/Detect4jAgent/releases/download/${DETECTOR_AGENT_VERSION}/Detect4jAgent-${DETECTOR_AGENT_VERSION}.jar"
 export DETECTOR_AGENT_PATH="$(pwd)/Detect4jAgent-${DETECTOR_AGENT_VERSION}.jar"
 echo "Starting jar..."
-java -jar "build/libs/Detect4j${VERSION:+"-$VERSION"}.jar" &
+java -jar "build/libs/Detect4j${VERSION:+"-$VERSION"}${OS:+"-$OS"}.jar" &
 DetectorPID=$!
 echo "Waiting 15 seconds..."
 sleep 15

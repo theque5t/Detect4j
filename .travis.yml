@@ -1,32 +1,39 @@
 ---
 env:
   global:
+  - OS="${TRAVIS_OS_NAME}"
   - VERSION="${TRAVIS_TAG}"
   - NAME=Detect4j
   - DETECTOR_AGENT_VERSION="v1.0.0-alpha.2"
   - DETECTOR_JVM_TARGET_PATTERN=".*Detect4j.*"
   - DETECTOR_SCAN_INTERVAL=5
   - DETECTOR_TIMEOUT=30
+
 language: java
-before_install:
-- chmod +x scripts/build.sh scripts/test.sh
-install: true
 jdk:
 - openjdk8
   # - openjdk9
   # - openjdk10
   # - openjdk11
+os:
+- linux
+- windows
+
+install: true
+before_install:
+- chmod +x scripts/build.sh scripts/test.sh
 before_script: scripts/build.sh
 script: scripts/test.sh
+
 jobs:
   include:
   - stage: deploy
-    before_install:
-    - chmod +x scripts/build.sh scripts/test.sh
-    install: true
-    jdk: openjdk8
-    before_script: scripts/build.sh
-    script: scripts/test.sh
+    # before_install:
+    # - chmod +x scripts/build.sh scripts/test.sh
+    # install: true
+    # jdk: openjdk8
+    # before_script: scripts/build.sh
+    # script: scripts/test.sh
     deploy:
       provider: releases
       api_key:
