@@ -9,15 +9,15 @@ env:
   - DETECTOR_SCAN_INTERVAL=5
   - DETECTOR_TIMEOUT=30
 
-language: java
-jdk:
-- openjdk8
-  # - openjdk9
-  # - openjdk10
-  # - openjdk11
-os:
-- linux
-# - windows
+# # language: java
+# jdk:
+# - openjdk8
+#   # - openjdk9
+#   # - openjdk10
+#   # - openjdk11
+# os:
+# - linux
+# # - windows
 
 install: true
 before_install:
@@ -27,6 +27,18 @@ script: scripts/test.sh
 
 jobs:
   include:
+  - stage: test
+    language: java
+    jdk: openjdk8
+    os: linux
+  - stage: test
+    language: shell
+    os: windows
+    before_install:
+    - export JAVA_HOME=${JAVA_HOME:-/c/jdk}
+    - export PATH=${JAVA_HOME}/bin:${PATH}
+    - choco install jdk8 -params 'installdir=c:\\jdk' -y
+    - java -version
   - stage: deploy
     # before_install:
     # - chmod +x scripts/build.sh scripts/test.sh
