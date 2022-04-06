@@ -2,8 +2,6 @@
 
 [![Build Status](https://app.travis-ci.com/theque5t/Detect4j.svg?branch=main)](https://app.travis-ci.com/github/theque5t/Detect4j)
 
-Runnable jar that will detect for specific classes in use within existing JVMs
-
 ## Vision
  
  - A tool that detects if a specific Java class(es) is actively in use on a system.
