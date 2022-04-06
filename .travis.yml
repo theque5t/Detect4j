@@ -27,29 +27,26 @@ script: scripts/test.sh
 
 jobs:
   include:
-  # - stage: test
-  #   language: java
-  #   jdk: openjdk8
-  #   os: linux
   - stage: test
-    language: shell
-    os: windows
-    env: YARN_GPG=no
-    before_install:
-    # - export JAVA_HOME=${JAVA_HOME:-/c/jdk}
-    # - export PATH=${JAVA_HOME}/bin:${PATH}
-    # - choco install openjdk8 -params 'installdir=c:\\jdk' -y
-    - choco install openjdk8
-    - export JAVA_HOME="C:\Program Files\OpenJDK\openjdk-8u322-b06\bin"
-    - export PATH=${JAVA_HOME}/bin:${PATH}
-    - choco install gradle --version=5.1
+    language: java
+    jdk: openjdk8
+    os: linux
+  # - stage: test
+  #   language: shell
+  #   os: windows
+  #   env: YARN_GPG=no
+  #   before_install:
+  #   - export JAVA_HOME=${JAVA_HOME:-/c/jdk}
+  #   - export PATH=${JAVA_HOME}/bin:${PATH}
+  #   - choco install jdk8 -params 'installdir=c:\\jdk' -y
+  #   # - choco install openjdk8
+  #   # - export JAVA_HOME="C:\Program Files\OpenJDK\openjdk-8u322-b06\bin"
+  #   # - export PATH=${JAVA_HOME}/bin:${PATH}
+  #   - choco install gradle --version=5.1
   - stage: deploy
-    # before_install:
-    # - chmod +x scripts/build.sh scripts/test.sh
-    # install: true
-    # jdk: openjdk8
-    # before_script: scripts/build.sh
-    # script: scripts/test.sh
+    language: java
+    jdk: openjdk8
+    os: linux
     deploy:
       provider: releases
       api_key:
