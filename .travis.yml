@@ -17,7 +17,7 @@ jdk:
   # - openjdk11
 os:
 - linux
-- windows
+# - windows
 
 install: true
 before_install:
