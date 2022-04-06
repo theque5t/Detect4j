@@ -21,10 +21,10 @@ SOFTWARE.
 ## How does it work?
 
 1. Searches for targeted JVMs using target pattern (regex)
-2. Scan each JVM matching the target pattern by:
-    a. Attaching to the JVM
-    b. Loading an agent into the JVM that scans for classes in use that match the target pattern (regex)
-    c. Logging what it's doing and what it's finding
+2. Scan each JVM matching the target pattern by:  
+    a. Attaching to the JVM  
+    b. Loading an agent into the JVM that scans for classes in use that match the target pattern (regex)  
+    c. Logging what it's doing and what it's finding  
     d. Detach from the JVM
 3. Wait until the next scan interval
 4. Repeat steps 1-3 until exited 
