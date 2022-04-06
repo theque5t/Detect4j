@@ -36,9 +36,10 @@ jobs:
     os: windows
     env: YARN_GPG=no
     before_install:
-    - export JAVA_HOME=${JAVA_HOME:-/c/jdk}
-    - export PATH=${JAVA_HOME}/bin:${PATH}
-    - choco install openjdk8 -params 'installdir=c:\\jdk' -y
+    # - export JAVA_HOME=${JAVA_HOME:-/c/jdk}
+    # - export PATH=${JAVA_HOME}/bin:${PATH}
+    # - choco install openjdk8 -params 'installdir=c:\\jdk' -y
+    - choco install openjdk8
     - choco install gradle --version=5.1
   - stage: deploy
     # before_install:
