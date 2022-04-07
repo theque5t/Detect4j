@@ -13,7 +13,7 @@
 
 ## Method
 
-- Runnable jar that that detects if a specific class(es) is in use within existing [Java Virtual Machines (JVM)](https://en.wikipedia.org/wiki/Java_virtual_machine)
+- Runnable jar that detects if a specific class(es) is in use within existing [Java Virtual Machines (JVM)](https://en.wikipedia.org/wiki/Java_virtual_machine)
 
 ## How does it work?
 
